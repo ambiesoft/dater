@@ -30,6 +30,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	
 	outmessage += buff;
 
+	HWND hBalloon = CreateWindow(TOOLTIPS_CLASS,
+		NULL,
+		WS_POPUP|TTS_NOPREFIX|TTS_BALLOON|TTS_ALWAYSTIP,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		NULL,
+		NULL,
+		NULL);
 	MessageBox(NULL, outmessage.c_str(), _T("dater"), MB_ICONINFORMATION);
 	return 0;
 }
