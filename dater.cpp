@@ -51,7 +51,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		return __LINE__;
 	}
 	if(!SendMessage(hBalloon,
-		(WM_USER + 33), // Adds a standard icon and title string to a ToolTip    
+		TTM_SETTITLE, // Adds a standard icon and title string to a ToolTip    
 		1,
 		(LPARAM)_T("title")))
 	{
