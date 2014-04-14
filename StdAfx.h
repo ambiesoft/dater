@@ -11,9 +11,10 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します
-
+#include <checkaccess.h>
 #include <windows.h>
-
+#include <commctrl.h>
+#include <shellapi.h>
 
 // TODO: プログラムで必要なヘッダー参照を追加してください。
 #include <tchar.h>
