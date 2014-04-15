@@ -28,7 +28,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	outmessage = buff;
 
 
-	_stprintf (buff,_T("‚Í %d:%d:%d ‚Å‚·B"),pnow->tm_hour,pnow->tm_min,pnow->tm_sec);
+	_stprintf (buff,_T("‚Í %02d:%02d:%02d ‚Å‚·B"),pnow->tm_hour,pnow->tm_min,pnow->tm_sec);
 	
 	outmessage += buff;
 
