@@ -13,6 +13,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
 {
+
 	 TCHAR buff[256];
      time_t now = time(NULL);
      struct tm *pnow = localtime(&now);
