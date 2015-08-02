@@ -4,9 +4,34 @@
 #include "stdafx.h"
 #include "resource.h"
 
-using namespace std;
+#include "../MyUtility/UTF16toUTF8.h"
+#include "../MyUtility/UrlEncode.h"
+#include "../MyUtility/stdwin32/stdwin32.h"
 
-BOOL NotifyIconize(DWORD dwMessage, LPCTSTR pInfoTitle , LPCTSTR pInfo);
+using namespace std;
+using namespace stdwin32;
+
+wstring enc(const wstring& os)
+{
+	BYTE* p8 = UTF16toUTF8(os.c_str());
+	char* pu8 = urlencodenew((char*)p8);
+	size_t pu8len = strlen(pu8);
+	
+	size_t pu8wlen = (pu8len+1)*2;
+	WCHAR* pu8w = (WCHAR*)calloc(pu8wlen,1);
+	MultiByteToWideChar(CP_ACP,
+		0,
+		pu8,
+		pu8len,
+		pu8w,
+		pu8wlen);
+
+	wstring ret = pu8w;
+	free(pu8w);
+	free(pu8);
+	free(p8);
+	return ret;
+}
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -33,67 +58,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	
 	outmessage += buff;
 
-#pragma comment(lib,"Comctl32.lib")
-	InitCommonControls();
-	HWND hBalloon = CreateWindow(_T("tooltips_class32"),
-		NULL,
-		WS_POPUP|0x02|0x40|0x01,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		NULL,
-		NULL,
-		NULL,
-		NULL);
-	if(!hBalloon)
-	{
-		MessageBox(NULL, _T("balloon"),NULL,MB_ICONERROR);
-		return __LINE__;
-	}
-	if(!SendMessage(hBalloon,
-		TTM_SETTITLE, // Adds a standard icon and title string to a ToolTip    
-		1,
-		(LPARAM)_T("title")))
-	{
-		MessageBox(NULL, _T("balloon sendmessage"),NULL,MB_ICONERROR);
-		return __LINE__;
-	}
-	if(!NotifyIconize(NIM_ADD, NULL, NULL))
-	{
-		MessageBox(NULL, _T("NotifyAdd"),NULL,MB_ICONERROR);
-		return __LINE__;
-	}
-	if(!NotifyIconize(NIM_MODIFY, _T("dater"), outmessage.c_str()))
-	{
-		MessageBox(NULL, _T("NotifyModify"),NULL,MB_ICONERROR);
-		return __LINE__;
-	}
-	Sleep(10000);
-	NotifyIconize(NIM_DELETE, NULL, NULL);
-	//MessageBox(NULL, outmessage.c_str(), _T("dater"), MB_ICONINFORMATION);
+	tstring strarg;
+	strarg += _T("/title:dater /icon:");
+	strarg += _T("\"");
+	strarg += stdGetModuleFileName();
+	strarg += _T("\"");
+	strarg += _T(" /duration:5000 ");
+	strarg += enc(outmessage);
+
+	wstring balloonexe=stdCombinePath(
+		stdGetParentDirectory(stdGetModuleFileName().c_str()).c_str(),
+		L"showballoon.exe");
+	ShellExecute(NULL,NULL,	balloonexe.c_str(),	strarg.c_str(),	NULL,	SW_SHOW);
+
 	return 0;
 }
 
 
-
-BOOL NotifyIconize(DWORD dwMessage, LPCTSTR pInfoTitle , LPCTSTR pInfo)
-{
-	NOTIFYICONDATA nid;
-	ZeroMemory(&nid,sizeof(nid));
-	nid.cbSize = sizeof(NOTIFYICONDATA);
-	nid.hWnd = NULL;
-	nid.uID = 123;
-	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | 0x00000010;
-	nid.dwInfoFlags      = 0x00000001;
-	nid.uTimeout         = 300;
-	nid.uCallbackMessage = 0; //WM_APP_TRAYMESSAGE;
-	nid.hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON_MAIN));
-	lstrcpy(nid.szTip, _T("dater"));
-	if(pInfoTitle)
-		lstrcpy( nid.szInfoTitle, pInfoTitle );
-	if(pInfo)
-		lstrcpy( nid.szInfo, pInfo );
-	
-	return Shell_NotifyIcon( dwMessage,&nid);
-}
