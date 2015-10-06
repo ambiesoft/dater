@@ -21,6 +21,8 @@
 #include <time.h>
 #include <string>
 #include "../MyUtility/tstring.h"
+
+#define countof(t) (sizeof(t)/sizeof(t[0]))
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ は前行の直前に追加の宣言を挿入します。
 

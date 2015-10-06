@@ -38,24 +38,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
 {
+	_tsetlocale(LC_ALL, _T(""));
+	tstring outmessage;
 
-	 TCHAR buff[256];
+	 TCHAR buff[256]; buff[0]=0;
      time_t now = time(NULL);
      struct tm *pnow = localtime(&now);
-     TCHAR week[][3] = {_T("“ú"),_T("ŒŽ"),_T("‰Î"),_T("…"),_T("–Ø"),_T("‹à"),_T("“y")};
-
-     _stprintf(buff, _T("¡“ú‚Í%2d”N%2dŒŽ%2d“ú(%s)‚Å‚·B\n"),
-        pnow->tm_year+1900,
-	    pnow->tm_mon + 1,
-	    pnow->tm_mday,
-	    week[pnow->tm_wday]);
-
-	tstring outmessage;
-	outmessage = buff;
-
-
-	_stprintf (buff,_T("Žž‚Í %02d:%02d:%02d ‚Å‚·B"),pnow->tm_hour,pnow->tm_min,pnow->tm_sec);
-	
+ 
+	_tcsftime(buff, countof(buff), _T("%x (%a) %X"), pnow);
 	outmessage += buff;
 
 	tstring strarg;
