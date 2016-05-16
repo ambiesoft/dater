@@ -1,4 +1,4 @@
-// dater.cpp : アプリケーション用のエントリ ポイントの定義
+// dater.cpp
 //
 
 #include "stdafx.h"
