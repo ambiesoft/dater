@@ -82,7 +82,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /machine:I386 /out:"C:\Linkout\dater\dater.exe"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy     C:\Linkout\CommonExe\showballoon.exe     C:\Linkout\dater\ 
+PostBuild_Cmds=copy      C:\Linkout\CommonExe\showballoon.exe      C:\Linkout\dater\ 
 # End Special Build Tool
 
 !ENDIF 
@@ -110,17 +110,17 @@ SOURCE=.\StdAfx.cpp
 # Begin Source File
 
 SOURCE=..\MyUtility\stdwin32\stdwin32.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\MyUtility\UrlEncode.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\MyUtility\UTF16toUTF8.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /Yu
 # End Source File
 # End Group
 # Begin Group "Header Files"
