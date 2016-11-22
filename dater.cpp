@@ -6,6 +6,7 @@
 
 #include "../MyUtility/UTF16toUTF8.h"
 #include "../MyUtility/UrlEncode.h"
+#include "../MyUtility/OpenCommon.h"
 #include "../MyUtility/stdwin32/stdwin32.h"
 
 using namespace std;
@@ -52,15 +53,28 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	strarg += _T("/title:dater /icon:");
 	strarg += _T("\"");
 	strarg += stdGetModuleFileName();
-	strarg += _T("\"");
-	strarg += _T(" /duration:5000 ");
-	strarg += enc(outmessage);
+	strarg += _T("\" ");
+	strarg += _T("/duration:10000 ");
+	strarg += _T("/balloonicon:1 ");
+	strarg += _T("\"") + enc(outmessage) + _T("\"");
 
 	wstring balloonexe=stdCombinePath(
-		stdGetParentDirectory(stdGetModuleFileName().c_str()).c_str(),
+		stdGetParentDirectory(stdGetModuleFileName()),
 		L"showballoon.exe");
-	ShellExecute(NULL,NULL,	balloonexe.c_str(),	strarg.c_str(),	NULL,	SW_SHOW);
+//		L"argCheck.exe");
 
+	// ShellExecute(NULL, L"open", balloonexe.c_str(), strarg.c_str(), NULL, SW_SHOW);
+	HANDLE hProcess = NULL;
+//	LPCTSTR ppp = _T("/title:dater /icon:\"C:\\Linkout\\dater\\daterD.exe\" /balloonicon:1 \"2016%2f11%2f22+%28%e7%81%ab%29+21%3a04%3a03\"");
+//	if (!OpenCommon(NULL, balloonexe.c_str(), ppp, NULL, &hProcess))
+	if (!OpenCommon(NULL, balloonexe.c_str(), strarg.c_str(), NULL, &hProcess))
+	{
+		return 1;
+	}
+
+	WaitForSingleObject(hProcess, 10000*10);
+	CloseHandle(hProcess);
+//	Sleep(10000);
 	return 0;
 }
 
