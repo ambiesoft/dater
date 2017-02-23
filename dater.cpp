@@ -9,6 +9,8 @@
 #include "../MyUtility/OpenCommon.h"
 #include "../MyUtility/stdwin32/stdwin32.h"
 
+#include "C:\\Linkout\\CommonDLL\\TimedMessageBox.h"
+
 using namespace std;
 using namespace stdwin32;
 
@@ -34,47 +36,79 @@ wstring enc(const wstring& os)
 	return ret;
 }
 
+void ErrorQuit(LPCWSTR pMessage)
+{
+	MessageBox(NULL,
+		pMessage,
+		APPNAME,
+		MB_ICONERROR);
+
+	ExitProcess(1);
+}
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR     lpCmdLine,
-                     int       nCmdShow )
+	HINSTANCE hPrevInstance,
+	LPTSTR     lpCmdLine,
+	int       nCmdShow)
 {
 	_tsetlocale(LC_ALL, _T(""));
 	tstring outmessage;
 
-	 TCHAR buff[256]; buff[0]=0;
-     time_t now = time(NULL);
-     struct tm *pnow = localtime(&now);
- 
+	TCHAR buff[256]; buff[0] = 0;
+	time_t now = time(NULL);
+	struct tm *pnow = localtime(&now);
+
 	_tcsftime(buff, countof(buff), _T("%x (%a) %X"), pnow);
 	outmessage += buff;
 
-	tstring strarg;
-	strarg += _T("/title:dater /icon:");
-	strarg += _T("\"");
-	strarg += stdGetModuleFileName();
-	strarg += _T("\" ");
-	strarg += _T("/duration:10000 ");
-	strarg += _T("/balloonicon:1 ");
-	strarg += _T("\"") + enc(outmessage) + _T("\"");
 
-	wstring balloonexe=stdCombinePath(
-		stdGetParentDirectory(stdGetModuleFileName()),
-		L"showballoon.exe");
-//		L"argCheck.exe");
 
-	// ShellExecute(NULL, L"open", balloonexe.c_str(), strarg.c_str(), NULL, SW_SHOW);
-	HANDLE hProcess = NULL;
-//	LPCTSTR ppp = _T("/title:dater /icon:\"C:\\Linkout\\dater\\daterD.exe\" /balloonicon:1 \"2016%2f11%2f22+%28%e7%81%ab%29+21%3a04%3a03\"");
-//	if (!OpenCommon(NULL, balloonexe.c_str(), ppp, NULL, &hProcess))
-	if (!OpenCommon(NULL, balloonexe.c_str(), strarg.c_str(), NULL, &hProcess))
+	if (!true)
 	{
-		return 1;
-	}
+		tstring strarg;
+		strarg += _T("/title:dater /icon:");
+		strarg += _T("\"");
+		strarg += stdGetModuleFileName();
+		strarg += _T("\" ");
+		strarg += _T("/duration:10000 ");
+		strarg += _T("/balloonicon:1 ");
+		strarg += _T("\"") + enc(outmessage) + _T("\"");
 
-	WaitForSingleObject(hProcess, 10000*10);
-	CloseHandle(hProcess);
-//	Sleep(10000);
+		wstring balloonexe = stdCombinePath(
+			stdGetParentDirectory(stdGetModuleFileName()),
+			L"showballoon.exe");
+		//		L"argCheck.exe");
+
+			// ShellExecute(NULL, L"open", balloonexe.c_str(), strarg.c_str(), NULL, SW_SHOW);
+		HANDLE hProcess = NULL;
+		//	LPCTSTR ppp = _T("/title:dater /icon:\"C:\\Linkout\\dater\\daterD.exe\" /balloonicon:1 \"2016%2f11%2f22+%28%e7%81%ab%29+21%3a04%3a03\"");
+		//	if (!OpenCommon(NULL, balloonexe.c_str(), ppp, NULL, &hProcess))
+		if (!OpenCommon(NULL, balloonexe.c_str(), strarg.c_str(), NULL, &hProcess))
+		{
+			return 1;
+		}
+
+		WaitForSingleObject(hProcess, 10000 * 10);
+		CloseHandle(hProcess);
+		//	Sleep(10000);
+	}
+	else
+	{
+		HMODULE hModule = LoadLibrary(L"C:\\Linkout\\CommonDLL\\TimedMessageBox.dll");
+		if (!hModule)
+			ErrorQuit(L"Failed to load C:\\Linkout\\CommonDLL\\TimedMessageBox.dll");
+
+		FNTimedMessageBox2 func2 = NULL;
+		func2 = (FNTimedMessageBox2)GetProcAddress(hModule, "fnTimedMessageBox2");
+		if (!func2)
+			ErrorQuit(L"Faied GetProcAddress");
+
+		TIMEDMESSAGEBOX_PARAMS tp;
+		tp.size = sizeof(tp);
+		tp.hWndCenterParent = NULL;
+		tp.position = TIMEDMESSAGEBOX_POSITION_BOTTOMRIGHT;
+
+		func2(NULL, 10, APPNAME, outmessage.c_str(), 0, &tp);
+	}
 	return 0;
 }
 
