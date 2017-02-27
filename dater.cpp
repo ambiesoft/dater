@@ -104,10 +104,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		TIMEDMESSAGEBOX_PARAMS tp;
 		tp.size = sizeof(tp);
+		tp.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD;
 		tp.hWndCenterParent = NULL;
 		tp.position = TIMEDMESSAGEBOX_POSITION_BOTTOMRIGHT;
-
-		func2(NULL, 10, APPNAME, outmessage.c_str(), 0, &tp);
+		tp.nShowCmd = SW_SHOWNOACTIVATE;
+		func2(NULL, 10, APPNAME, outmessage.c_str(), &tp);
 	}
 	return 0;
 }
