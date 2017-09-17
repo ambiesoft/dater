@@ -4,15 +4,16 @@
 #include "stdafx.h"
 #include "resource.h"
 
-#include "../MyUtility/UTF16toUTF8.h"
-#include "../MyUtility/UrlEncode.h"
-#include "../MyUtility/OpenCommon.h"
-#include "../MyUtility/stdwin32/stdwin32.h"
+#include "../lsMisc/UTF16toUTF8.h"
+#include "../lsMisc/UrlEncode.h"
+#include "../lsMisc/OpenCommon.h"
+#include "../lsMisc/stdwin32/stdwin32.h"
 
 #include "C:\\Linkout\\CommonDLL\\TimedMessageBox.h"
 
 using namespace std;
 using namespace stdwin32;
+using namespace Ambiesoft;
 
 wstring enc(const wstring& os)
 {
@@ -107,7 +108,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		tp.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD;
 		tp.hWndCenterParent = NULL;
 		tp.position = TIMEDMESSAGEBOX_POSITION_BOTTOMRIGHT;
-		tp.nShowCmd = SW_SHOWNOACTIVATE;
+		tp.nShowCmd = SW_SHOW;// SW_SHOWNOACTIVATE;
 		func2(NULL, 10, APPNAME, outmessage.c_str(), &tp);
 	}
 	return 0;

@@ -1,7 +1,3 @@
-// stdafx.h : 標準のシステム インクルード ファイル、
-//            または参照回数が多く、かつあまり変更されない
-//            プロジェクト専用のインクルード ファイルを記述します。
-//
 
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
@@ -10,21 +6,25 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define WIN32_LEAN_AND_MEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します
+#define WIN32_LEAN_AND_MEAN
+
+#if _MSC_VER < 1500
 #include <checkaccess.h>
+#endif
+
 #include <windows.h>
 #include <commctrl.h>
 #include <shellapi.h>
 
-// TODO: プログラムで必要なヘッダー参照を追加してください。
+
 #include <tchar.h>
 #include <time.h>
 #include <string>
-#include "../MyUtility/tstring.h"
+#include "../lsMisc/tstring.h"
 
 #define APPNAME L"dater"
 #define countof(t) (sizeof(t)/sizeof(t[0]))
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ は前行の直前に追加の宣言を挿入します。
+// Microsoft Visual C++ 
 
 #endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)

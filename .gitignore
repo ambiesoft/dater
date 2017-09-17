@@ -1,0 +1,6 @@
+UnicodeDebug/
+UnicodeRelease/
+*.ncb
+*.suo
+*.user
+

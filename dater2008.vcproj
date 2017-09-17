@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,L:\MSSDK\2003\Include,L:\check,L:\stlsoft-1.9.118\include"
+				AdditionalIncludeDirectories=".;../lsMisc/stlsoft/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_MBCS;UNICODE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -147,7 +147,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="L:\MSSDK\2003\Include,L:\check,L:\stlsoft-1.9.118\include"
+				AdditionalIncludeDirectories=".;../lsMisc/stlsoft/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_MBCS;UNICODE"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -241,7 +241,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\MyUtility\OpenCommon.cpp"
+				RelativePath="..\lsMisc\OpenCommon.cpp"
 				>
 				<FileConfiguration
 					Name="UnicodeDebug|Win32"
@@ -307,7 +307,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\MyUtility\stdwin32\stdwin32.cpp"
+				RelativePath="..\lsMisc\stdwin32\stdwin32.cpp"
 				>
 				<FileConfiguration
 					Name="UnicodeDebug|Win32"
@@ -329,7 +329,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\MyUtility\UrlEncode.cpp"
+				RelativePath="..\lsMisc\UrlEncode.cpp"
 				>
 				<FileConfiguration
 					Name="UnicodeDebug|Win32"
@@ -351,7 +351,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\MyUtility\UTF16toUTF8.cpp"
+				RelativePath="..\lsMisc\UTF16toUTF8.cpp"
 				>
 				<FileConfiguration
 					Name="UnicodeDebug|Win32"
@@ -382,15 +382,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\MyUtility\stdwin32\stdwin32.h"
+				RelativePath="..\lsMisc\stdwin32\stdwin32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\MyUtility\UrlEncode.h"
+				RelativePath="..\lsMisc\UrlEncode.h"
 				>
 			</File>
 			<File
-				RelativePath="..\MyUtility\UTF16toUTF8.h"
+				RelativePath="..\lsMisc\UTF16toUTF8.h"
 				>
 			</File>
 		</Filter>
