@@ -4,16 +4,14 @@
 #include "stdafx.h"
 #include "resource.h"
 
-#include "../lsMisc/UTF16toUTF8.h"
-#include "../lsMisc/UrlEncode.h"
-#include "../lsMisc/OpenCommon.h"
-#include "../lsMisc/stdwin32/stdwin32.h"
 
-#include "C:\\Linkout\\CommonDLL\\TimedMessageBox.h"
+#include "../lsMisc/CommandLineParser.h"
 
 using namespace std;
 using namespace stdwin32;
 using namespace Ambiesoft;
+
+static LPCTSTR pDefaultFormat = _T("%x (%a) %X");
 
 wstring enc(const wstring& os)
 {
@@ -37,6 +35,24 @@ wstring enc(const wstring& os)
 	return ret;
 }
 
+void ShowHelp()
+{
+	tstring msg = _T("dater [/locale locale] [/format format] [/balloon] [/count count]\n\n");
+	msg += _T("locale: string passed to setlocale()\n");
+	
+	msg += _T("format: format string passed to strftime(), default format is \"");
+	msg += pDefaultFormat;
+	msg += _T("\"\n");
+
+	msg += _T("/balloon: Use balloon\n");
+	msg += _T("count: Number of seconds to automatically close\n");
+
+	MessageBox(NULL,
+		msg.c_str(),
+		APPNAME,
+		MB_ICONINFORMATION);
+
+}
 void ErrorQuit(LPCWSTR pMessage)
 {
 	MessageBox(NULL,
@@ -51,46 +67,80 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPTSTR     lpCmdLine,
 	int       nCmdShow)
 {
-	_tsetlocale(LC_ALL, _T(""));
+
+	tstring localestring;
+	tstring format;
+	bool isHelp = false;
+	bool isBalloon = false;
+	int count = 0;
+	CCommandLineParser parser;
+	parser.AddOption(_T("/locale"), 1, &localestring);
+	parser.AddOption(_T("/format"), 1, &format);
+	parser.AddOption(_T("/balloon"), 0, &isBalloon);
+	parser.AddOption(_T("/h"), _T("/?"), 0, &isHelp);
+	parser.AddOption(_T("/count"), 1, &count);
+
+	parser.Parse();
+
+	if (isHelp)
+	{
+		ShowHelp();
+		return 0;
+	}
+	if (parser.hadUnknownOption())
+	{
+		tstring msg;
+		msg += I18N(_T("Unknow Option:\n\n"));
+		msg += parser.getUnknowOptionStrings();
+		ErrorQuit(msg.c_str());
+	}
+	_tsetlocale(LC_ALL, localestring.c_str());
+
 	tstring outmessage;
 
 	TCHAR buff[256]; buff[0] = 0;
 	time_t now = time(NULL);
-	struct tm *pnow = localtime(&now);
+	struct tm tmnow;
+	localtime_s(&tmnow, &now);
 
-	_tcsftime(buff, countof(buff), _T("%x (%a) %X"), pnow);
+	_tcsftime(buff, countof(buff), format.empty() ? pDefaultFormat:format.c_str(), &tmnow);
 	outmessage += buff;
 
-
-
-	if (!true)
+	count = count <= 0 ? 10 : count;
+	int millisec = count * 1000;
+	if (isBalloon)
 	{
-		tstring strarg;
-		strarg += _T("/title:dater /icon:");
-		strarg += _T("\"");
-		strarg += stdGetModuleFileName();
-		strarg += _T("\" ");
-		strarg += _T("/duration:10000 ");
-		strarg += _T("/balloonicon:1 ");
-		strarg += _T("\"") + enc(outmessage) + _T("\"");
+		tstring strarg = string_format(_T("/title:%s /icon:\"%s\" /duration %d /balloonicon:1 \"%s\""),
+			APPNAME,
+			stdGetModuleFileName().c_str(),
+			millisec,
+			enc(outmessage).c_str()
+		);
+
+	
+		// tstring strarg;
+		// strarg += _T("/title:dater /icon:");
+		// strarg += _T("\"");
+		// strarg += stdGetModuleFileName();
+		// strarg += _T("\" ");
+		// strarg += _T("/duration:10000 ");
+		// strarg += _T("/balloonicon:1 ");
+		// strarg += _T("\"") + enc(outmessage) + _T("\"");
 
 		wstring balloonexe = stdCombinePath(
 			stdGetParentDirectory(stdGetModuleFileName()),
 			L"showballoon.exe");
-		//		L"argCheck.exe");
+		//	L"argCheck.exe");
 
-			// ShellExecute(NULL, L"open", balloonexe.c_str(), strarg.c_str(), NULL, SW_SHOW);
+
 		HANDLE hProcess = NULL;
-		//	LPCTSTR ppp = _T("/title:dater /icon:\"C:\\Linkout\\dater\\daterD.exe\" /balloonicon:1 \"2016%2f11%2f22+%28%e7%81%ab%29+21%3a04%3a03\"");
-		//	if (!OpenCommon(NULL, balloonexe.c_str(), ppp, NULL, &hProcess))
 		if (!OpenCommon(NULL, balloonexe.c_str(), strarg.c_str(), NULL, &hProcess))
 		{
 			return 1;
 		}
 
-		WaitForSingleObject(hProcess, 10000 * 10);
+		WaitForSingleObject(hProcess, millisec);
 		CloseHandle(hProcess);
-		//	Sleep(10000);
 	}
 	else
 	{
@@ -109,7 +159,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		tp.hWndCenterParent = NULL;
 		tp.position = TIMEDMESSAGEBOX_POSITION_BOTTOMRIGHT;
 		tp.nShowCmd = SW_SHOWNOACTIVATE;
-		func2(NULL, 10, APPNAME, outmessage.c_str(), &tp);
+		func2(NULL, count, APPNAME, outmessage.c_str(), &tp);
 	}
 	return 0;
 }

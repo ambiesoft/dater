@@ -20,11 +20,22 @@
 #include <tchar.h>
 #include <time.h>
 #include <string>
+
+#include "C:\\Linkout\\CommonDLL\\TimedMessageBox.h"
+
 #include "../lsMisc/tstring.h"
+#include "../lsMisc/UTF16toUTF8.h"
+#include "../lsMisc/UrlEncode.h"
+#include "../lsMisc/OpenCommon.h"
+#include "../lsMisc/stdwin32/stdwin32.h"
+
 
 #define APPNAME L"dater"
 #define countof(t) (sizeof(t)/sizeof(t[0]))
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ 
+
+
+#define I18N(s)	(s)
 
 #endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)

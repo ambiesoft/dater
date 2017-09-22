@@ -1,6 +1,10 @@
+Release/
+Debug/
+
 UnicodeDebug/
 UnicodeRelease/
 *.ncb
 *.suo
 *.user
-
+*.VC.db
+ipch/
