@@ -111,6 +111,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy C:\Linkout\CommonExe\showballoon.exe  &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy C:\Linkout\CommonDLL\TimedMessageBox.dll  &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -208,7 +209,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy       C:\Linkout\CommonExe\showballoon.exe       C:\Linkout\dater\"
+				CommandLine="copy C:\Linkout\CommonExe\showballoon.exe  &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy C:\Linkout\CommonDLL\TimedMessageBox.dll  &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

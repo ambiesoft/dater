@@ -144,9 +144,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	}
 	else
 	{
-		HMODULE hModule = LoadLibrary(L"C:\\Linkout\\CommonDLL\\TimedMessageBox.dll");
+		HMODULE hModule = LoadLibrary(L"TimedMessageBox.dll");
 		if (!hModule)
-			ErrorQuit(L"Failed to load C:\\Linkout\\CommonDLL\\TimedMessageBox.dll");
+			ErrorQuit(L"Failed to load TimedMessageBox.dll");
 
 		FNTimedMessageBox2 func2 = NULL;
 		func2 = (FNTimedMessageBox2)GetProcAddress(hModule, "fnTimedMessageBox2");
@@ -155,7 +155,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 		TIMEDMESSAGEBOX_PARAMS tp;
 		tp.size = sizeof(tp);
-		tp.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD;
+		tp.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD | TIMEDMESSAGEBOX_FLAGS_TOPMOST;
 		tp.hWndCenterParent = NULL;
 		tp.position = TIMEDMESSAGEBOX_POSITION_BOTTOMRIGHT;
 		tp.nShowCmd = SW_SHOWNOACTIVATE;
