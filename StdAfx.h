@@ -28,6 +28,7 @@
 #include "../lsMisc/UrlEncode.h"
 #include "../lsMisc/OpenCommon.h"
 #include "../lsMisc/stdwin32/stdwin32.h"
+#include "../lsMisc/stdosd/stdosd.h"
 
 
 #define APPNAME L"dater"

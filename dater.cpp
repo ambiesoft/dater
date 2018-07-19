@@ -10,6 +10,7 @@
 using namespace std;
 using namespace stdwin32;
 using namespace Ambiesoft;
+using namespace Ambiesoft::stdosd;
 
 static LPCTSTR pDefaultFormat = _T("%x (%a) %X");
 
@@ -110,7 +111,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	int millisec = count * 1000;
 	if (isBalloon)
 	{
-		tstring strarg = string_format(_T("/title:%s /icon:\"%s\" /duration %d /balloonicon:1 \"%s\""),
+		tstring strarg = stdFormat(_T("/title:%s /icon:\"%s\" /duration %d /balloonicon:1 \"%s\""),
 			APPNAME,
 			stdGetModuleFileName().c_str(),
 			millisec,
