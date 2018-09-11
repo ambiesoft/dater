@@ -5,7 +5,6 @@
 #include "resource.h"
 
 
-#include "../lsMisc/CommandLineParser.h"
 
 using namespace std;
 using namespace stdwin32;
@@ -68,7 +67,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPTSTR     lpCmdLine,
 	int       nCmdShow)
 {
-
 	tstring localestring;
 	tstring format;
 	bool isHelp = false;
@@ -117,16 +115,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			millisec,
 			enc(outmessage).c_str()
 		);
-
-	
-		// tstring strarg;
-		// strarg += _T("/title:dater /icon:");
-		// strarg += _T("\"");
-		// strarg += stdGetModuleFileName();
-		// strarg += _T("\" ");
-		// strarg += _T("/duration:10000 ");
-		// strarg += _T("/balloonicon:1 ");
-		// strarg += _T("\"") + enc(outmessage) + _T("\"");
 
 		wstring balloonexe = stdCombinePath(
 			stdGetParentDirectory(stdGetModuleFileName()),

@@ -29,7 +29,7 @@
 #include "../lsMisc/OpenCommon.h"
 #include "../lsMisc/stdwin32/stdwin32.h"
 #include "../lsMisc/stdosd/stdosd.h"
-
+#include "../lsMisc/CommandLineParser.h"
 
 #define APPNAME L"dater"
 #define countof(t) (sizeof(t)/sizeof(t[0]))
