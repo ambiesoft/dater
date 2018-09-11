@@ -13,27 +13,7 @@ using namespace Ambiesoft::stdosd;
 
 static LPCTSTR pDefaultFormat = _T("%x (%a) %X");
 
-wstring enc(const wstring& os)
-{
-	BYTE* p8 = UTF16toUTF8(os.c_str());
-	unsigned char* pu8 = UrlDecode((char*)p8);
-	size_t pu8len = strlen((char*)pu8);
-	
-	size_t pu8wlen = (pu8len+1)*2;
-	WCHAR* pu8w = (WCHAR*)calloc(pu8wlen,1);
-	MultiByteToWideChar(CP_ACP,
-		0,
-		(LPCCH)pu8,
-		pu8len,
-		pu8w,
-		pu8wlen);
 
-	wstring ret = pu8w;
-	free(pu8w);
-	free(pu8);
-	free(p8);
-	return ret;
-}
 
 void ShowHelp()
 {
@@ -113,7 +93,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			APPNAME,
 			stdGetModuleFileName().c_str(),
 			millisec,
-			enc(outmessage).c_str()
+			Utf8UrlEncode(outmessage).c_str()
 		);
 
 		wstring balloonexe = stdCombinePath(
