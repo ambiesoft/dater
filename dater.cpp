@@ -7,7 +7,7 @@
 
 
 using namespace std;
-using namespace stdwin32;
+// using namespace stdwin32;
 using namespace Ambiesoft;
 using namespace Ambiesoft::stdosd;
 
@@ -82,7 +82,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	struct tm tmnow;
 	localtime_s(&tmnow, &now);
 
-	_tcsftime(buff, countof(buff), format.empty() ? pDefaultFormat:format.c_str(), &tmnow);
+	_tcsftime(buff, _countof(buff), format.empty() ? pDefaultFormat:format.c_str(), &tmnow);
 	outmessage += buff;
 
 	count = count <= 0 ? 10 : count;
@@ -91,13 +91,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		tstring strarg = stdFormat(_T("/title:%s /icon:\"%s\" /duration %d /balloonicon:1 \"%s\""),
 			APPNAME,
-			stdGetModuleFileName().c_str(),
+			stdGetModuleFileName<TCHAR>().c_str(),
 			millisec,
 			Utf8UrlEncode(outmessage).c_str()
 		);
 
 		wstring balloonexe = stdCombinePath(
-			stdGetParentDirectory(stdGetModuleFileName()),
+			stdGetParentDirectory(stdGetModuleFileName<TCHAR>()),
 			L"showballoon.exe");
 		//	L"argCheck.exe");
 

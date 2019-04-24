@@ -8,3 +8,5 @@ UnicodeRelease/
 *.user
 *.VC.db
 ipch/
+.vs/
+

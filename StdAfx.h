@@ -32,7 +32,7 @@
 #include "../lsMisc/CommandLineParser.h"
 
 #define APPNAME L"dater"
-#define countof(t) (sizeof(t)/sizeof(t[0]))
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ 
 
