@@ -2,6 +2,10 @@
 //
 
 #include "stdafx.h"
+
+#include "../lsMisc/GetLastErrorString.h"
+#include "../lsMisc/SetClipboardText.h"
+
 #include "resource.h"
 
 
@@ -52,18 +56,33 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool isHelp = false;
 	bool isBalloon = false;
 	int count = 0;
-	CCommandLineParser parser;
-	parser.AddOption(_T("/locale"), 1, &localestring);
-	parser.AddOption(_T("/format"), 1, &format);
-	parser.AddOption(_T("/balloon"), 0, &isBalloon);
-	parser.AddOption(_T("/h"), _T("/?"), 0, &isHelp);
-	parser.AddOption(_T("/count"), 1, &count);
+	bool isClip = false;
+	tstring clipformat;
+
+	CCommandLineParser parser(_T("dater: Shows Date"));
+	parser.AddOption(_T("/locale"), 1, &localestring,
+		ArgEncodingFlags::ArgEncodingFlags_Default,_T("Local to set"));
+	parser.AddOption(_T("/format"), 1, &format,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("time format"));
+	parser.AddOption(_T("/balloon"), 0, &isBalloon,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("show balloon instead of default window"));
+	parser.AddOption(_T("/h"), _T("/?"), 0, &isHelp,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("show help"));
+	parser.AddOption(_T("/count"), 1, &count,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("second to close window"));
+	parser.AddOption(_T("/clip"), 0, &isClip,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("copy to the clipboard"));
+	parser.AddOption(_T("/clipformat"), 1, &clipformat,
+		ArgEncodingFlags::ArgEncodingFlags_Default, _T("time format used for copying to the clipboard"));
 
 	parser.Parse();
 
 	if (isHelp)
 	{
-		ShowHelp();
+		MessageBox(NULL,
+			parser.getHelpMessage().c_str(),
+			APPNAME,
+			MB_ICONINFORMATION); 
 		return 0;
 	}
 	if (parser.hadUnknownOption())
@@ -77,16 +96,32 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	tstring outmessage;
 
-	TCHAR buff[256]; buff[0] = 0;
+	TCHAR buff[256] = {};
+
 	time_t now = time(NULL);
 	struct tm tmnow;
 	localtime_s(&tmnow, &now);
 
-	_tcsftime(buff, _countof(buff), format.empty() ? pDefaultFormat:format.c_str(), &tmnow);
+	_tcsftime(buff, _countof(buff), format.empty() ? 
+		pDefaultFormat : format.c_str(), 
+		&tmnow);
 	outmessage += buff;
 
+	if (isClip)
+	{
+		_tcsftime(buff, _countof(buff), clipformat.empty() ?
+			pDefaultFormat : clipformat.c_str(),
+			&tmnow);
+		if (!SetClipboardText(nullptr,buff))
+		{
+			tstring message = stdFormat(_T("Failed to set to the clipboard. (%s)"),
+				GetLastErrorString(GetLastError()).c_str());
+			ErrorQuit(message.c_str());
+		}
+		
+	}
 	count = count <= 0 ? 10 : count;
-	int millisec = count * 1000;
+	const int millisec = count * 1000;
 	if (isBalloon)
 	{
 		tstring strarg = stdFormat(_T("/title:%s /icon:\"%s\" /duration %d /balloonicon:1 \"%s\""),
